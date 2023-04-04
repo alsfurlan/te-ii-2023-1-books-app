@@ -3,4 +3,5 @@ export interface AutorInterface {
     nome: string
     genero: string
     dataNascimento?: string
+    biografia?: string
 }

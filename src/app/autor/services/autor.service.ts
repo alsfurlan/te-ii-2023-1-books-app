@@ -6,12 +6,16 @@ import { AutorInterface } from '../types/autor.interface';
 
 @Injectable()
 export class AutorService {
-  constructor(private httpClient: HttpClient) {}
+  constructor(private httpClient: HttpClient) { }
 
   getAutores(): Observable<AutorInterface[]> {
     return this.httpClient.get<AutorInterface[]>(
       `${environment.apiUrl}/autores`
     );
+  }
+
+  save(autor: AutorInterface): Observable<AutorInterface> {
+    return this.httpClient.post<AutorInterface>(`${environment.apiUrl}/autores`, autor);
   }
 
   remove(autor: AutorInterface): Observable<void> {
