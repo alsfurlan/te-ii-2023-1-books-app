@@ -40,12 +40,12 @@
         <ion-textarea formControlName="biografia" placeholder="Digite o nome do autor" [autoGrow]="true" rows="10"></ion-textarea>
       </ion-item>
     </ion-list>
-    <ion-fab horizontal="end" vertical="bottom">
+    <ion-fab horizontal="end" vertical="bottom" slot="fixed">
       <ion-fab-button (click)="save()">
         <ion-icon name="checkmark"></ion-icon>
       </ion-fab-button>
     </ion-fab>
-    <ion-fab horizontal="start" vertical="bottom">
+    <ion-fab horizontal="start" vertical="bottom" slot="fixed">
       <ion-fab-button color="light" (click)="cancel()">
         <ion-icon name="close"></ion-icon>
       </ion-fab-button>
