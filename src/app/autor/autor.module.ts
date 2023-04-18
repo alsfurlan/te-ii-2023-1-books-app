@@ -7,10 +7,11 @@ import { AutorRoutingModule } from './autor-routing.module';
 import { AutorFormPageComponent } from './components/autor-form-page/autor-form-page.component';
 import { AutorListPageComponent } from './components/autor-list-page/autor-list-page.component';
 import { AutorService } from './services/autor.service';
+import { AutorFavoritosPageComponent } from './components/autor-favoritos-page/autor-favoritos-page.component';
 
 @NgModule({
   imports: [CommonModule, HttpClientModule, IonicModule, FormsModule, ReactiveFormsModule, AutorRoutingModule],
-  declarations: [AutorListPageComponent, AutorFormPageComponent],
+  declarations: [AutorListPageComponent, AutorFormPageComponent, AutorFavoritosPageComponent],
   providers: [AutorService],
 })
 export class AutorModule {}

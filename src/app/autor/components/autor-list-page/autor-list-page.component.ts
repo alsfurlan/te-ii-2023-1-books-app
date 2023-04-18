@@ -77,4 +77,14 @@ export class AutorListPageComponent implements ViewWillEnter, ViewDidLeave, OnDe
     });
     alert.present();
   }
+
+  favorite(autor: AutorInterface) {
+    const autoresFavoritesLocalStorage = window.localStorage.getItem('autoresFavoritos');
+    let arrayAutoresFavoritos = autoresFavoritesLocalStorage ? JSON.parse(autoresFavoritesLocalStorage) : [];
+
+    const contain = arrayAutoresFavoritos.some((a: AutorInterface) => a.id === autor.id);
+    arrayAutoresFavoritos = contain ? arrayAutoresFavoritos : [...arrayAutoresFavoritos, autor]
+
+    window.localStorage.setItem('autoresFavoritos', JSON.stringify(arrayAutoresFavoritos))
+  }
 }
