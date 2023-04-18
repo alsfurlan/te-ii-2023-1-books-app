@@ -15,14 +15,26 @@
       <ion-item>
         <ion-label position="floating">Nome:</ion-label>
         <ion-input formControlName="nome" placeholder="Digite o nome do autor"></ion-input>
+        <ion-note slot="error" *ngIf="autorForm.controls['nome'].hasError('required')">
+          O campo é obrigatório
+        </ion-note>
+        <ion-note slot="error" *ngIf="autorForm.controls['nome'].hasError('minlength')">
+          O campo deve ter no mínimo {{autorForm.controls['nome'].errors?.['minlength'].requiredLength}} caracteres
+        </ion-note>
+        <ion-note slot="error" *ngIf="autorForm.controls['nome'].hasError('maxlength')">
+          O campo deve ter no máximo {{autorForm.controls['nome'].errors?.['maxlength'].requiredLength}} caracteres
+        </ion-note>
+        <ion-note slot="error" *ngIf="autorForm.controls['nome'].hasError('invalidName')">
+          Nome inválido
+        </ion-note>
       </ion-item>
       <ion-item>
         <ion-label> Data de nascimento </ion-label>
         <ion-datetime-button datetime="dataNasc"></ion-datetime-button>
         <ion-modal [keepContentsMounted]="true">
           <ng-template>
-            <ion-datetime formControlName="dataNascimento" id="dataNasc" presentation="date" showDefaultButtons="true" doneText="Selecionar"
-              cancelText="Cancelar" showDefaultTitle="true">
+            <ion-datetime formControlName="dataNascimento" id="dataNasc" presentation="date" showDefaultButtons="true"
+              doneText="Selecionar" cancelText="Cancelar" showDefaultTitle="true">
               <span slot="title">Selecione a data de Nascimento</span>
             </ion-datetime>
           </ng-template>
@@ -37,11 +49,12 @@
       </ion-item>
       <ion-item>
         <ion-label position="floating">Biografia:</ion-label>
-        <ion-textarea formControlName="biografia" placeholder="Digite o nome do autor" [autoGrow]="true" rows="10"></ion-textarea>
+        <ion-textarea formControlName="biografia" placeholder="Digite o nome do autor" [autoGrow]="true"
+          rows="10"></ion-textarea>
       </ion-item>
     </ion-list>
     <ion-fab horizontal="end" vertical="bottom" slot="fixed">
-      <ion-fab-button (click)="save()">
+      <ion-fab-button (click)="save()" [disabled]="autorForm.invalid">
         <ion-icon name="checkmark"></ion-icon>
       </ion-fab-button>
     </ion-fab>
