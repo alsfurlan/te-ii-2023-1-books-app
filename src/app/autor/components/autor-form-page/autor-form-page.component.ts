@@ -80,7 +80,13 @@ export class AutorFormPageComponent implements OnInit, OnDestroy,
   validaNomeAutorTeste(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const value = control.value.toLowerCase();
-      return value.includes('teste') || value.includes('xyz') ? { invalidName: true } : null;
+      if (value === 'teste') {
+        return { invalidName: 'teste' }
+      }
+      if (value.includes('xyz')) {
+        return { invalidName: 'xyz' }
+      }
+      return null;
     };
   }
 

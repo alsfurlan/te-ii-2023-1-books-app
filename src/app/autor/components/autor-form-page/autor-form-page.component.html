@@ -19,14 +19,17 @@
           O campo é obrigatório
         </ion-note>
         <ion-note slot="error" *ngIf="autorForm.controls['nome'].hasError('minlength')">
-          O campo deve ter no mínimo {{autorForm.controls['nome'].errors?.['minlength'].requiredLength}} caracteres
+          O campo tem {{autorForm.controls['nome'].errors?.['minlength'].actualLength}} caracteres, entretanto deve
+          ter no mínimo {{autorForm.controls['nome'].errors?.['minlength'].requiredLength}} caracteres
         </ion-note>
         <ion-note slot="error" *ngIf="autorForm.controls['nome'].hasError('maxlength')">
           O campo deve ter no máximo {{autorForm.controls['nome'].errors?.['maxlength'].requiredLength}} caracteres
         </ion-note>
         <ion-note slot="error" *ngIf="autorForm.controls['nome'].hasError('invalidName')">
-          Nome inválido
+          O nome do autor não pode conter o trecho de caracteres:
+          <strong>{{autorForm.controls['nome'].errors?.['invalidName']}}</strong>
         </ion-note>
+        <pre>{{autorForm.controls['nome'].errors | json}}</pre>
       </ion-item>
       <ion-item>
         <ion-label> Data de nascimento </ion-label>
