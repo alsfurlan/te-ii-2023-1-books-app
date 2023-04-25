@@ -3,7 +3,10 @@ import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn,
 import { ActivatedRoute, Route, Router } from '@angular/router';
 import { AutorService } from '../../services/autor.service';
 import { Subscription } from 'rxjs';
-import { AlertController, ViewDidEnter, ViewDidLeave, ViewWillEnter, ViewWillLeave } from '@ionic/angular';
+import { AlertController, LoadingController, ViewDidEnter, ViewDidLeave, ViewWillEnter, ViewWillLeave } from '@ionic/angular';
+import { NacionalidadeInterface } from '../../types/nacionalidade.interface';
+import { NacionalidadeService } from '../../services/nacionalidade.service';
+import { LoadingService } from 'src/app/shared/services/loading.service';
 
 @Component({
   selector: 'app-autor-form-page',
@@ -13,19 +16,23 @@ export class AutorFormPageComponent implements OnInit, OnDestroy,
   ViewWillEnter, ViewDidEnter,
   ViewWillLeave, ViewDidLeave {
 
-  autorForm!: FormGroup
+  autorForm!: FormGroup;
   subscription = new Subscription()
   createMode: boolean = false;
   editMode: boolean = false;
   id!: number
+  nacionalidades: NacionalidadeInterface[] = [];
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private formBuilder: FormBuilder,
     private autorService: AutorService,
-    private alertController: AlertController
-  ) { }
+    private alertController: AlertController,
+    private nacionalidadeService: NacionalidadeService,
+    private loadingService: LoadingService,
+  ) {
+  }
 
   ionViewWillEnter(): void {
     console.log('ionViewWillEnter')
@@ -41,6 +48,23 @@ export class AutorFormPageComponent implements OnInit, OnDestroy,
   }
 
   ngOnInit(): void {
+    this.loadingService
+    this.initializeForm();
+    this.loadNacionalidades();
+    this.loadAutorOnEditMode()
+  }
+
+  private async loadNacionalidades() {
+    this.loadingService.on();
+    this.subscription.add(
+      this.nacionalidadeService.getNacionalidades().subscribe((response) => {
+        this.nacionalidades = response;
+        this.loadingService.off();
+      })
+    );
+  }
+
+  private loadAutorOnEditMode() {
     const [url] = this.activatedRoute.snapshot.url;
     this.editMode = url.path === 'edicao';
     this.createMode = !this.editMode;
@@ -51,16 +75,22 @@ export class AutorFormPageComponent implements OnInit, OnDestroy,
       this.id = id ? parseInt(id) : -1;
 
       if (this.id !== -1) {
+        this.loadingService.on()
         this.autorService.getAutor(this.id).subscribe((autor) => {
-          this.autorForm = this.formBuilder.group({
+          this.autorForm.patchValue({
             nome: autor.nome,
             genero: autor.genero,
             dataNascimento: autor.dataNascimento,
-            biografia: autor.biografia
+            biografia: autor.biografia,
+            nacionalidade: autor.nacionalidade,
           })
+          this.loadingService.off()
         })
       }
     }
+  }
+
+  private initializeForm() {
     this.autorForm = this.formBuilder.group({
       nome: [
         'Nome qualquer',
@@ -73,7 +103,8 @@ export class AutorFormPageComponent implements OnInit, OnDestroy,
       ],
       genero: 'F',
       dataNascimento: '1970-01-01',
-      biografia: ['Biografia qualquer', Validators.required]
+      biografia: ['Biografia qualquer', Validators.required],
+      nacionalidade: '',
     })
   }
 
@@ -133,6 +164,10 @@ export class AutorFormPageComponent implements OnInit, OnDestroy,
 
   cancel(): void {
     this.router.navigate(['./autores'])
+  }
+
+  compareWith(o1: NacionalidadeInterface, o2: NacionalidadeInterface) {
+    return o1 && o2 ? o1.id === o2.id : o1 === o2;
   }
 
 

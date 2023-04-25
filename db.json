@@ -1,10 +1,29 @@
 {
-  "autores": [
+  "nacionalidades": [
     {
       "id": 1,
+      "descricao": "Brasileiro (a)"
+    },
+    {
+      "id": 2,
+      "descricao": "Inglês"
+    },
+    {
+      "id": 3,
+      "descricao": "Estadunidense"
+    }
+  ],
+  "autores": [
+    {
       "nome": "Martin Fowler",
+      "genero": "M",
       "dataNascimento": "1963-12-18",
-      "genero": "M"
+      "biografia": "Biografia do autor",
+      "nacionalidade": {
+        "id": 3,
+        "descricao": "Estadunidense"
+      },
+      "id": 1
     },
     {
       "id": 2,
@@ -19,10 +38,26 @@
       "genero": "M"
     },
     {
-      "id": 4,
       "nome": "Douglas Cockford",
+      "genero": "M",
       "dataNascimento": "1966-12-18",
-      "genero": "M"
+      "biografia": "12312",
+      "nacionalidade": {
+        "id": 1,
+        "descricao": "Brasileiro (a)"
+      },
+      "id": 4
+    },
+    {
+      "nome": "Nome qualquer",
+      "genero": "F",
+      "dataNascimento": "1970-01-01",
+      "biografia": "Biografia qualquer",
+      "nacionalidade": {
+        "id": 2,
+        "descricao": "Inglês"
+      },
+      "id": 5
     }
   ],
   "livros": [

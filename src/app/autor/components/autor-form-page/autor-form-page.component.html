@@ -51,6 +51,14 @@
         </ion-select>
       </ion-item>
       <ion-item>
+        <ion-label>Nacionalidade</ion-label>
+        <ion-select [compareWith]="compareWith" formControlName="nacionalidade" placeholder="Informe a nacionalidade do autor">
+          <ion-select-option *ngFor="let n of nacionalidades" [value]="n">
+            {{n.descricao}}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-item>
         <ion-label position="floating">Biografia:</ion-label>
         <ion-textarea formControlName="biografia" placeholder="Digite o nome do autor" [autoGrow]="true"
           rows="10"></ion-textarea>
