@@ -1,9 +1,23 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  ValidationErrors,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
 import { ActivatedRoute, Route, Router } from '@angular/router';
 import { AutorService } from '../../services/autor.service';
 import { Subscription } from 'rxjs';
-import { AlertController, LoadingController, ViewDidEnter, ViewDidLeave, ViewWillEnter, ViewWillLeave } from '@ionic/angular';
+import {
+  AlertController,
+  LoadingController,
+  ViewDidEnter,
+  ViewDidLeave,
+  ViewWillEnter,
+  ViewWillLeave,
+} from '@ionic/angular';
 import { NacionalidadeInterface } from '../../types/nacionalidade.interface';
 import { NacionalidadeService } from '../../services/nacionalidade.service';
 import { LoadingService } from 'src/app/shared/services/loading.service';
@@ -12,15 +26,20 @@ import { LoadingService } from 'src/app/shared/services/loading.service';
   selector: 'app-autor-form-page',
   templateUrl: './autor-form-page.component.html',
 })
-export class AutorFormPageComponent implements OnInit, OnDestroy,
-  ViewWillEnter, ViewDidEnter,
-  ViewWillLeave, ViewDidLeave {
-
+export class AutorFormPageComponent
+  implements
+    OnInit,
+    OnDestroy,
+    ViewWillEnter,
+    ViewDidEnter,
+    ViewWillLeave,
+    ViewDidLeave
+{
   autorForm!: FormGroup;
-  subscription = new Subscription()
+  subscription = new Subscription();
   createMode: boolean = false;
   editMode: boolean = false;
-  id!: number
+  id: string | null = null;
   nacionalidades: NacionalidadeInterface[] = [];
 
   constructor(
@@ -30,28 +49,27 @@ export class AutorFormPageComponent implements OnInit, OnDestroy,
     private autorService: AutorService,
     private alertController: AlertController,
     private nacionalidadeService: NacionalidadeService,
-    private loadingService: LoadingService,
-  ) {
-  }
+    private loadingService: LoadingService
+  ) {}
 
   ionViewWillEnter(): void {
-    console.log('ionViewWillEnter')
+    console.log('ionViewWillEnter');
   }
   ionViewDidEnter(): void {
-    console.log('ionViewDidEnter')
+    console.log('ionViewDidEnter');
   }
   ionViewWillLeave(): void {
-    console.log('ionViewWillLeave')
+    console.log('ionViewWillLeave');
   }
   ionViewDidLeave(): void {
-    console.log('ionViewDidLeave')
+    console.log('ionViewDidLeave');
   }
 
   ngOnInit(): void {
-    this.loadingService
+    this.loadingService;
     this.initializeForm();
     this.loadNacionalidades();
-    this.loadAutorOnEditMode()
+    this.loadAutorOnEditMode();
   }
 
   private async loadNacionalidades() {
@@ -70,12 +88,9 @@ export class AutorFormPageComponent implements OnInit, OnDestroy,
     this.createMode = !this.editMode;
 
     if (this.editMode) {
-
-      const id = this.activatedRoute.snapshot.paramMap.get('id');
-      this.id = id ? parseInt(id) : -1;
-
-      if (this.id !== -1) {
-        this.loadingService.on()
+      this.id = this.activatedRoute.snapshot.paramMap.get('id');
+      if (this.id !== null) {
+        this.loadingService.on();
         this.autorService.getAutor(this.id).subscribe((autor) => {
           this.autorForm.patchValue({
             nome: autor.nome,
@@ -83,9 +98,9 @@ export class AutorFormPageComponent implements OnInit, OnDestroy,
             dataNascimento: autor.dataNascimento,
             biografia: autor.biografia,
             nacionalidade: autor.nacionalidade,
-          })
-          this.loadingService.off()
-        })
+          });
+          this.loadingService.off();
+        });
       }
     }
   }
@@ -99,76 +114,63 @@ export class AutorFormPageComponent implements OnInit, OnDestroy,
           Validators.minLength(3),
           Validators.maxLength(50),
           this.validaNomeAutorTeste(),
-        ]
+        ],
       ],
       genero: 'F',
       dataNascimento: '1970-01-01',
       biografia: ['Biografia qualquer', Validators.required],
       nacionalidade: '',
-    })
+    });
   }
 
   validaNomeAutorTeste(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const value = control.value.toLowerCase();
       if (value === 'teste') {
-        return { invalidName: 'teste' }
+        return { invalidName: 'teste' };
       }
       if (value.includes('xyz')) {
-        return { invalidName: 'xyz' }
+        return { invalidName: 'xyz' };
       }
       return null;
     };
   }
 
   ngOnDestroy(): void {
-    this.subscription.unsubscribe()
+    this.subscription.unsubscribe();
   }
 
   save(): void {
-    if (this.createMode) {
-      this.subscription.add(
-        this.autorService.save(this.autorForm.value).subscribe(
-          () => {
-            this.router.navigate(['./autores'])
-          },
-          async () => {
-            const alerta = await this.alertController.create({
-              header: 'Erro',
-              message: 'Não foi possível salvar os dados do autor',
-              buttons: ['Ok']
-            })
-            alerta.present()
-          }
-        )
-      )
-    } else {
-      this.autorService.update({
-        ...this.autorForm.value,
-        id: this.id
-      }).subscribe({
+    const observable = this.createMode
+      ? this.autorService.add(this.autorForm.value)
+      : this.autorService.update({ ...this.autorForm.value, id: this.id });
+
+    this.subscription.add(
+      observable.subscribe({
         next: () => {
-          this.router.navigate(['./autores'])
+          this.router.navigate(['./autores']);
         },
-        error: async () => {
+        error: async (response) => {
+          const message = response.error?.message;
           const alerta = await this.alertController.create({
             header: 'Erro',
-            message: 'Não foi possível atualizar os dados do autor',
-            buttons: ['Ok']
-          })
-          alerta.present()
-        }
+            subHeader: `Não foi possível ${
+              this.createMode ? 'adicionar' : 'atualizar'
+            } os dados do autor`,
+            message: message || '',
+            buttons: ['Ok'],
+          });
+          alerta.present();
+        },
       })
-    }
+    );
   }
 
   cancel(): void {
-    this.router.navigate(['./autores'])
+    this.router.navigate(['./autores']);
   }
 
   compareWith(o1: NacionalidadeInterface, o2: NacionalidadeInterface) {
     return o1 && o2 ? o1.id === o2.id : o1 === o2;
   }
-
-
 }

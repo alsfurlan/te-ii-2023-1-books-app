@@ -8,7 +8,7 @@ import { AutorInterface } from '../types/autor.interface';
 export class AutorService {
   constructor(private httpClient: HttpClient) { }
 
-  getAutor(id: number): Observable<AutorInterface> {
+  getAutor(id: string): Observable<AutorInterface> {
     return this.httpClient.get<AutorInterface>(
       `${environment.apiUrl}/autores/${id}`
     )
@@ -27,7 +27,7 @@ export class AutorService {
     )
   }
 
-  save(autor: AutorInterface): Observable<AutorInterface> {
+  add(autor: AutorInterface): Observable<AutorInterface> {
     return this.httpClient.post<AutorInterface>(
       `${environment.apiUrl}/autores`,
       autor

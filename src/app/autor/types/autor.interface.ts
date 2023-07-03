@@ -1,7 +1,7 @@
 import { NacionalidadeInterface } from "./nacionalidade.interface"
 
 export interface AutorInterface {
-    id: number
+    id: string
     nome: string
     genero: string
     dataNascimento?: string

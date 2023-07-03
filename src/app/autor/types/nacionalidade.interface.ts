@@ -1,4 +1,4 @@
 export interface NacionalidadeInterface {
-  id: number;
-  descricao: string;
+  id: string;
+  nacionalidade: string;
 }

@@ -29,7 +29,6 @@
           O nome do autor não pode conter o trecho de caracteres:
           <strong>{{autorForm.controls['nome'].errors?.['invalidName']}}</strong>
         </ion-note>
-        <pre>{{autorForm.controls['nome'].errors | json}}</pre>
       </ion-item>
       <ion-item>
         <ion-label> Data de nascimento </ion-label>
@@ -54,7 +53,7 @@
         <ion-label>Nacionalidade</ion-label>
         <ion-select [compareWith]="compareWith" formControlName="nacionalidade" placeholder="Informe a nacionalidade do autor">
           <ion-select-option *ngFor="let n of nacionalidades" [value]="n">
-            {{n.descricao}}
+            {{n.nacionalidade}}
           </ion-select-option>
         </ion-select>
       </ion-item>
