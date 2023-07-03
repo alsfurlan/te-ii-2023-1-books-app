@@ -6,26 +6,37 @@ import { LivroInterface } from '../types/livro.interface';
 
 @Injectable()
 export class LivroService {
-  constructor(private http: HttpClient) { }
+  constructor(private httpClient: HttpClient) { }
 
-  getLivro(id: number): Observable<LivroInterface> {
-    return this.http.get<LivroInterface>(`${environment.apiUrl}/livros/${id}`);
+  getLivro(id: string): Observable<LivroInterface> {
+    return this.httpClient.get<LivroInterface>(
+      `${environment.apiUrl}/livros/${id}`
+    )
   }
 
   getLivros(): Observable<LivroInterface[]> {
-    return this.http.get<LivroInterface[]>(`${environment.apiUrl}/livros`);
+    return this.httpClient.get<LivroInterface[]>(
+      `${environment.apiUrl}/livros`
+    );
   }
-
-  save(livro: LivroInterface): Observable<LivroInterface> {
-    return this.http.post<LivroInterface>(`${environment.apiUrl}/livros`, livro);
-  }
-
 
   update(livro: LivroInterface): Observable<LivroInterface> {
-    return this.http.put<LivroInterface>(`${environment.apiUrl}/livros/${livro.id}`, livro);
+    return this.httpClient.put<LivroInterface>(
+      `${environment.apiUrl}/livros/${livro.id}`,
+      livro
+    )
   }
 
-  remove({ id }: LivroInterface): Observable<void> {
-    return this.http.delete<void>(`${environment.apiUrl}/livros/${id}`);
+  add(livro: LivroInterface): Observable<LivroInterface> {
+    return this.httpClient.post<LivroInterface>(
+      `${environment.apiUrl}/livros`,
+      livro
+    );
+  }
+
+  remove(livro: LivroInterface): Observable<void> {
+    return this.httpClient.delete<void>(
+      `${environment.apiUrl}/livros/${livro.id}`
+    );
   }
 }

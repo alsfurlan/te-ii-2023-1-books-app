@@ -1,7 +1,11 @@
+import { AutorInterface } from 'src/app/autor/types/autor.interface';
+import { GeneroEnum } from './genero.enum';
+
 export interface LivroInterface {
-    id?: number;
-    nome: string,
-    autor: string,
-    preco?: number,
-    publicacao?: Date,
+  id: string;
+  titulo: string;
+  subtitulo?: string;
+  genero: GeneroEnum;
+  dataLancamento?: string;
+  autores: AutorInterface[];
 }

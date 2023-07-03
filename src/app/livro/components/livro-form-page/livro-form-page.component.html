@@ -1,0 +1,82 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      Cadastro de Livro
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="livroForm">
+    <ion-list>
+      <ion-item>
+        <ion-label position="floating">Título:</ion-label>
+        <ion-input formControlName="titulo" placeholder="Digite o titulo do livro"></ion-input>
+        <ion-note slot="error" *ngIf="livroForm.controls['titulo'].hasError('required') && livroForm.controls['titulo'].dirty">
+          O campo é obrigatório
+        </ion-note>
+        <ion-note slot="error" *ngIf="livroForm.controls['titulo'].hasError('maxlength')">
+          O campo pode ter no máximo 100 caracters
+        </ion-note>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Subtítulo:</ion-label>
+        <ion-input formControlName="subtitulo" placeholder="Digite o subtitulo do livro"></ion-input>
+        <ion-note slot="error" *ngIf="livroForm.controls['subtitulo'].hasError('maxlength')">
+          O campo pode ter no máximo 100 caracters
+        </ion-note>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>Gênero</ion-label>
+        <ion-select formControlName="genero" placeholder="Selecione o gênero">
+          <ion-select-option value="INFANTIL">INFANTIL</ion-select-option>
+          <ion-select-option value="BIOGRAFIA">BIOGRAFIA</ion-select-option>
+          <ion-select-option value="HISTORIA">HISTÓRIA</ion-select-option>
+          <ion-select-option value="FICCAO">FICÇÃO</ion-select-option>
+          <ion-select-option value="ROMANCE">ROMANCE</ion-select-option>
+          <ion-select-option value="COMEDIA">COMÉDIA</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item>
+        <ion-label> Data de Lançamento </ion-label>
+        <ion-datetime-button datetime="dataLancamento"></ion-datetime-button>
+        <ion-modal [keepContentsMounted]="true">
+          <ng-template>
+            <ion-datetime formControlName="dataLancamento" id="dataLancamento" presentation="date" showDefaultButtons="true"
+              doneText="Selecionar" cancelText="Cancelar" showDefaultTitle="true">
+              <span slot="title">Selecione a data de Lancamento</span>
+            </ion-datetime>
+          </ng-template>
+        </ion-modal>
+      </ion-item>
+      <ion-item>
+        <ion-label>Autor(es)</ion-label>
+        <ion-select [compareWith]="compareWith" [multiple]="true" formControlName="autores" placeholder="Informe o autor">
+          <ion-select-option *ngFor="let a of autores" [value]="a">
+            {{a.nome}}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ion-list>
+    <ion-fab horizontal="end" vertical="bottom" slot="fixed">
+      <ion-fab-button (click)="save()" [disabled]="livroForm.invalid">
+        <ion-icon name="checkmark"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+    <ion-fab horizontal="start" vertical="bottom" slot="fixed">
+      <ion-fab-button color="light" (click)="cancel()">
+        <ion-icon name="close"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+  </form>
+</ion-content>
+
+<ion-footer>
+
+</ion-footer>

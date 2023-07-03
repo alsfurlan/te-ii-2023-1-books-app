@@ -1,0 +1,8 @@
+export enum GeneroEnum {
+    INFANTIL = 'INFANTIL',
+    BIOGRAFIA = 'BIOGRAFIA',
+    HISTORIA = 'HISTORIA',
+    FICCAO = 'FICCAO',
+    ROMANCE = 'ROMANCE',
+    COMEDIA = 'COMEDIA',
+}
